@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FavouriteLibrary.App">
+    <!--
+        Define global resources and styles here, that apply to all pages in your app.
+    -->
+    <Application.Resources>
+        <OnPlatform x:Key="MaterialFontFamily" x:TypeArguments="x:String">
+            <On Platform="iOS" Value="Material Design Icons" />
+            <On Platform="Android" Value="materialdesignicons-webfont.ttf#Material Design Icons" />
+            <On Platform="UWP" Value="Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+        </OnPlatform>
+        <ResourceDictionary>
+            <Color x:Key="NavigationPrimary">#464658</Color>
+            <Color x:Key="Red">#d80f21</Color>
+            <Color x:Key="LightGray">#f6f6f6</Color>
+            <Color x:Key="MiddleGray">#9393a9</Color>
+            <Color x:Key="DarkGray">#464658</Color>
+            <Color x:Key="TitleGray">#B5B5C8</Color>
+            <Color x:Key="GrayBg">#efefef</Color>
+            <Color x:Key="GrayInput">#f4f4f9</Color>
+            <Color x:Key="AlternativeDataGridBg">#e0e0e0</Color>
+            <Color x:Key="Hint">#B5B5C8</Color>
+            <Color x:Key="LightHint">#c4c4c4</Color>
+            <Color x:Key="SideMenu">#31313E</Color>
+            <Color x:Key="Cyan">#5fc1cc</Color>
+            <Color x:Key="Black">#1b1b1f</Color>
+            <Color x:Key="Orange">#e9580c</Color>
+            <Color x:Key="Blue">#538ac0</Color>
+            <Color x:Key="ValidationErrorBrush">#d80f21</Color>
+            <Color x:Key="TransparentPlayerBlue">#1a6896f0</Color>
+            <Color x:Key="MaterialDesignPaper">Transparent</Color>
+            <Color x:Key="Border">#e4e4f0</Color>
+            <Color x:Key="TransparentPlayerBlueColor">#1a6896f0</Color>
+            <Color x:Key="TransparentCyanColor">#bf5fc1cc</Color>
+            <Color x:Key="GrayForeground">#7E7E95</Color>
+            <Color x:Key="IconHint">#babaca</Color>
+            <Color x:Key="LightPurple">#e9e9f4</Color>
+            <Color x:Key="DataGridBorder">#d7d7e5</Color>
+            <x:String x:Key="Settings">&#xf0493;</x:String>
+            <x:String x:Key="Account">&#xf0004;</x:String>
+            <x:String x:Key="LeftArrow">&#xf0053;</x:String>
+            <x:String x:Key="RightArrow">&#xf005a;</x:String>
+            <x:String x:Key="Refresh">&#xf0450;</x:String>
+            <x:String x:Key="Close">&#xf0156;</x:String>
+            <x:String x:Key="Library">&#xf05da;</x:String>
+            <x:String x:Key="Heart">&#xf02d1;</x:String>
+            <x:String x:Key="HeartOutline">&#xf02d5;</x:String>
+            <x:String x:Key="Pen">&#xf0d13;</x:String>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource SideMenu}" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
+            <Style x:Key="MainButton" TargetType="Button">
+                <Setter Property="FontFamily" Value="Roboto" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="{StaticResource Red}" />
+                <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="BorderWidth" Value="0" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HeightRequest">
+                    <Setter.Value>
+                        <OnIdiom x:TypeArguments="x:Double">
+                            <OnIdiom.Tablet>53</OnIdiom.Tablet>
+                            <OnIdiom.Phone>36</OnIdiom.Phone>
+                        </OnIdiom>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="FontSize">
+                    <Setter.Value>
+                        <OnIdiom x:TypeArguments="x:Double">
+                            <OnIdiom.Tablet>16</OnIdiom.Tablet>
+                            <OnIdiom.Phone>11</OnIdiom.Phone>
+                        </OnIdiom>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                        <Setter Property="TextColor" Value="{StaticResource IconHint}" />
+                        <Setter Property="BackgroundColor" Value="{StaticResource Border}" />
+                        <Setter Property="Opacity" Value="1" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style
+                x:Key="TransparentButton"
+                BasedOn="{StaticResource MainButton}"
+                TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Style.Triggers>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="1" />
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="IconButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Padding" Value="0" />
+                <Style.Triggers>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.6" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>        
+    </Application.Resources>
+</Application>

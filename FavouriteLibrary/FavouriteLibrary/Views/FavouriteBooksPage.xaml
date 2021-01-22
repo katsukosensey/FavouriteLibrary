@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:FavouriteLibrary.Models;assembly=FavouriteLibrary"
+             xmlns:viewModels="clr-namespace:FavouriteLibrary.ViewModels;assembly=FavouriteLibrary"
+             x:Class="FavouriteLibrary.Views.FavouriteBooksPage"
+             BackgroundColor="{StaticResource GrayBg}" 
+             Title="Избранное">
+    <ContentPage.BindingContext>
+        <viewModels:FavouriteBooksViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <RefreshView  x:DataType="viewModels:FavouriteBooksViewModel" Command="{Binding LoadBooksCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <CollectionView x:Name="ItemsListView"
+                            Margin="20,0"
+                            ItemsSource="{Binding Books}"
+                            SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="7"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame 
+                            HasShadow="True"
+                            BackgroundColor="White"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center">
+                            <Grid x:DataType="models:Book">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.1*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <Image
+                                Grid.Column="0"
+                                    Aspect="AspectFit"
+                                    Margin="3"
+                                    Source="{Binding ImagePath}"></Image>
+                                <StackLayout Margin="10,0,0,0" Grid.Column="1" Padding="10" VerticalOptions="Center" >
+                                    <Label Text="{Binding Name}" 
+                                           LineBreakMode="NoWrap" 
+                                           Style="{DynamicResource ListItemTextStyle}" 
+                                           FontSize="16" />
+                                    <Label Text="{Binding AuthorName}" 
+                                           LineBreakMode="NoWrap"
+                                           Style="{DynamicResource ListItemDetailTextStyle}"
+                                           FontSize="13" />
+                                </StackLayout>
+                                <ImageButton
+                                    Grid.Column="2"
+                                    VerticalOptions="Start"
+                                    HorizontalOptions="End"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding Source={RelativeSource  AncestorType={x:Type viewModels:FavouriteBooksViewModel}}, Path=RemoveCommand}"		
+                                    CommandParameter="{Binding .}"
+                                    Margin="0,3,3,0">
+                                    <ImageButton.Source>
+                                        <FontImageSource
+                                            FontFamily="{StaticResource MaterialFontFamily}"
+                                            Glyph="{StaticResource Close}"
+                                            Color="{StaticResource Hint}">
+                                            <FontImageSource.Size>
+                                                <OnIdiom x:TypeArguments="x:Double">
+                                                    <OnIdiom.Tablet>26</OnIdiom.Tablet>
+                                                    <OnIdiom.Phone>20</OnIdiom.Phone>
+                                                </OnIdiom>
+                                            </FontImageSource.Size>
+                                        </FontImageSource>
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FavouriteLibrary.Views.AuthorBooksPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:FavouriteLibrary.Models;assembly=FavouriteLibrary"
+    xmlns:viewModels="clr-namespace:FavouriteLibrary.ViewModels;assembly=FavouriteLibrary"
+    BackgroundColor="{StaticResource GrayBg}">
+    <ContentPage.BindingContext>
+        <viewModels:AuthorBooksViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <RefreshView x:DataType="viewModels:AuthorBooksViewModel" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <CollectionView
+                x:Name="ItemsListView"
+                ItemsSource="{Binding Books}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        HorizontalItemSpacing="7"
+                        Orientation="Vertical"
+                        Span="2"
+                        VerticalItemSpacing="7" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            BackgroundColor="White"
+                            HasShadow="True"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center">
+                            <StackLayout x:DataType="models:Book" VerticalOptions="Center">
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="200"
+                                    Source="{Binding ImagePath}" />
+                                <Label
+                                    FontSize="16"
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemTextStyle}"
+                                    Text="{Binding Name}" />
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

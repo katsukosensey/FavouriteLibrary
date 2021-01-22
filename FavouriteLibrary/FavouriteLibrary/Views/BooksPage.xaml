@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FavouriteLibrary.Views.BooksPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:FavouriteLibrary.Models;assembly=FavouriteLibrary"
+    xmlns:viewModels="clr-namespace:FavouriteLibrary.ViewModels;assembly=FavouriteLibrary"
+    Title="Книги"
+    BackgroundColor="{StaticResource GrayBg}">
+    <ContentPage.BindingContext>
+        <viewModels:BooksViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <RefreshView
+            x:DataType="viewModels:BooksViewModel"
+            Command="{Binding LoadBooksCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <CollectionView
+                x:Name="ItemsListView"
+                Margin="20,0"
+                ItemsSource="{Binding Books}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="7" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            BackgroundColor="White"
+                            HasShadow="True"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center">
+                            <Grid x:DataType="models:Book">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.3*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="0.1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image
+                                    Grid.Column="0"
+                                    Margin="3"
+                                    Aspect="AspectFit"
+                                    Source="{Binding ImagePath}" />
+                                <StackLayout
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    Padding="10"
+                                    VerticalOptions="Center">
+                                    <Label
+                                        FontSize="16"
+                                        LineBreakMode="NoWrap"
+                                        Style="{DynamicResource ListItemTextStyle}"
+                                        Text="{Binding Name}" />
+                                    <Label
+                                        FontSize="13"
+                                        LineBreakMode="NoWrap"
+                                        Style="{DynamicResource ListItemDetailTextStyle}"
+                                        Text="{Binding AuthorName}" />
+                                </StackLayout>
+                                <ImageButton
+                                    Grid.Column="2"
+                                    Margin="0,3,3,0"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:BooksViewModel}}, Path=FavouriteStateChangedCommand}"
+                                    CommandParameter="{Binding .}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Start">
+                                    <ImageButton.Style>
+                                        <Style TargetType="ImageButton">
+                                            <Setter Property="Source">
+                                                <Setter.Value>
+                                                    <FontImageSource
+                                                        FontFamily="{StaticResource MaterialFontFamily}"
+                                                        Glyph="{StaticResource HeartOutline}"
+                                                        Color="{StaticResource Red}">
+                                                        <FontImageSource.Size>
+                                                            <OnIdiom x:TypeArguments="x:Double">
+                                                                <OnIdiom.Tablet>26</OnIdiom.Tablet>
+                                                                <OnIdiom.Phone>20</OnIdiom.Phone>
+                                                            </OnIdiom>
+                                                        </FontImageSource.Size>
+                                                    </FontImageSource>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding IsFavourite}"
+                                                    TargetType="ImageButton"
+                                                    Value="True">
+                                                    <Setter Property="Source">
+                                                        <Setter.Value>
+                                                            <FontImageSource
+                                                                FontFamily="{StaticResource MaterialFontFamily}"
+                                                                Glyph="{StaticResource Heart}"
+                                                                Color="{StaticResource Red}">
+                                                                <FontImageSource.Size>
+                                                                    <OnIdiom x:TypeArguments="x:Double">
+                                                                        <OnIdiom.Tablet>26</OnIdiom.Tablet>
+                                                                        <OnIdiom.Phone>20</OnIdiom.Phone>
+                                                                    </OnIdiom>
+                                                                </FontImageSource.Size>
+                                                            </FontImageSource>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ImageButton.Style>
+                                </ImageButton>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

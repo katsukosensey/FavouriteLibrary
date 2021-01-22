@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage
+    x:Class="FavouriteLibrary.Views.AuthorDetailsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:FavouriteLibrary.ViewModels;assembly=FavouriteLibrary"
+    xmlns:views="clr-namespace:FavouriteLibrary.Views;assembly=FavouriteLibrary"
+    Title="{Binding Author.Name}"
+    CurrentPageChanged="AuthorDetailsPage_OnCurrentPageChanged"
+    BackgroundColor="{StaticResource NavigationPrimary}"
+    BarBackgroundColor="Transparent">
+    <TabbedPage.BindingContext>
+        <viewModels:AuthorDetailsViewModel />
+    </TabbedPage.BindingContext>
+    <views:AuthorBooksPage Title="КНИГИ" />
+    <views:AboutAuthorPage Title="ОБ АВТОРЕ" />
+</TabbedPage>
