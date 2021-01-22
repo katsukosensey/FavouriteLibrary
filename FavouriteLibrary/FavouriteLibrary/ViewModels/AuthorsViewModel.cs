@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
+using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
 using FavouriteLibrary.Views;
@@ -21,8 +18,8 @@ namespace FavouriteLibrary.ViewModels
 
         public AuthorsViewModel()
         {
-            bookService = new BookService();
-            authorService = new AuthorService();
+            bookService = ServiceLocator.Current.GetInstance<IBookService>();
+            authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
             dialogService = DependencyService.Get<IDialogService>();
             LoadAuthorsCommand = new Command(LoadAuthors);
             ShowDetailsCommand = new Command<Author>(ShowDetails);

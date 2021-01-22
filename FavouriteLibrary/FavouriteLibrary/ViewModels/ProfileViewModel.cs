@@ -1,4 +1,5 @@
-﻿using FavouriteLibrary.Services;
+﻿using CommonServiceLocator;
+using FavouriteLibrary.Services;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary.ViewModels
@@ -13,7 +14,7 @@ namespace FavouriteLibrary.ViewModels
 
         public ProfileViewModel()
         {
-            authService = new AuthService();
+            authService = ServiceLocator.Current.GetInstance<IAuthService>();
             dialogService = DependencyService.Get<IDialogService>();
             LogoutCommand = new Command(Logout);
             InitProfile();

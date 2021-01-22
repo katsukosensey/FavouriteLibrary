@@ -1,4 +1,5 @@
-﻿using FavouriteLibrary.Services;
+﻿using CommonServiceLocator;
+using FavouriteLibrary.Services;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary.ViewModels
@@ -42,7 +43,7 @@ namespace FavouriteLibrary.ViewModels
 
         public RegistrationViewModel()
         {
-            authService = new AuthService();
+            authService = ServiceLocator.Current.GetInstance<IAuthService>();
             ApplyCommand = new Command(Apply);
         }
 

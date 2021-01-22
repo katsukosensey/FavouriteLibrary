@@ -1,7 +1,4 @@
-﻿using FavouriteLibrary.Models;
-using FavouriteLibrary.ViewModels;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms.Xaml;
 
 namespace FavouriteLibrary.Views
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
 using Xamarin.Forms;
@@ -25,7 +26,7 @@ namespace FavouriteLibrary.ViewModels
 
         public AuthorDetailsViewModel()
         {
-            authorService = new AuthorService();
+            authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
         }
 
         private async void InitAuthor()

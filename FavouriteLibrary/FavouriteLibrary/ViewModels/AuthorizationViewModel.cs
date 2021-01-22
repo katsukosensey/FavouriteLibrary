@@ -1,4 +1,4 @@
-﻿using FavouriteLibrary.Views;
+﻿using CommonServiceLocator;
 using FavouriteLibrary.Services;
 using Xamarin.Forms;
 
@@ -16,7 +16,7 @@ namespace FavouriteLibrary.ViewModels
 
         public AuthorizationViewModel()
         {
-            authService = new AuthService();
+            authService = ServiceLocator.Current.GetInstance<IAuthService>();
             LoginCommand = new Command(OnLoginClicked);
             RegisterCommand = new Command(OnRegisterClicked);
         }

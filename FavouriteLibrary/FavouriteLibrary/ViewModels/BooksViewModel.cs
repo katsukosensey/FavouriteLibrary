@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
 using Xamarin.Forms;
@@ -18,8 +19,8 @@ namespace FavouriteLibrary.ViewModels
 
         public BooksViewModel()
         {
-            bookService = new BookService();
-            authorService = new AuthorService();
+            bookService = ServiceLocator.Current.GetInstance<IBookService>();
+            authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
             dialogService = DependencyService.Get<IDialogService>();
             LoadBooksCommand = new Command(LoadBooks);
             FavouriteStateChangedCommand = new Command<Book>(ChangeFavouriteState);
