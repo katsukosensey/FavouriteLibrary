@@ -1,5 +1,6 @@
 ﻿using CommonServiceLocator;
 using FavouriteLibrary.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary.ViewModels
@@ -22,15 +23,17 @@ namespace FavouriteLibrary.ViewModels
 
         private async void Logout()
         {
-            var result = await authService.Logout();
+            var token = await SecureStorage.GetAsync("token");
+            var result = await authService.Logout(token);
             if (result.IsSuccess)
             {
+                SecureStorage.Remove("token");
                 await Shell.Current.GoToAsync("//login");
             }
             else
             {
                 dialogService.ShowError(
-                    ErrorStore.DataLoadingFailureMessage,
+                    result.Error,
                     ErrorStore.DataLoadingFailure,
                     "Ok",
                     () => dialogService.CloseMessage());
@@ -50,7 +53,7 @@ namespace FavouriteLibrary.ViewModels
             else
             {
                 dialogService.ShowError(
-                    ErrorStore.DataLoadingFailureMessage,
+                    result.Error,
                     ErrorStore.DataLoadingFailure,
                     "Ok",
                     () => dialogService.CloseMessage());

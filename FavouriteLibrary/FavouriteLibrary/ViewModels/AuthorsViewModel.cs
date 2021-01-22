@@ -56,7 +56,7 @@ namespace FavouriteLibrary.ViewModels
                         else
                         {
                             dialogService.ShowError(
-                                ErrorStore.DataLoadingFailureMessage,
+                                result.Error,
                                 ErrorStore.DataLoadingFailure,
                                 "Ok",
                                 () => dialogService.CloseMessage());
@@ -73,7 +73,7 @@ namespace FavouriteLibrary.ViewModels
             {
                 IsBusy = false;
                 dialogService.ShowError(
-                    ErrorStore.DataLoadingFailureMessage,
+                    result.Error,
                     ErrorStore.DataLoadingFailure,
                     "Ok",
                     () => dialogService.CloseMessage());

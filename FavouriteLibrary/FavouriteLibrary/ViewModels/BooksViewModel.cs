@@ -4,6 +4,7 @@ using System.Linq;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary.ViewModels
@@ -30,14 +31,15 @@ namespace FavouriteLibrary.ViewModels
 
         private async void ChangeFavouriteState(Book book)
         {
-            Result<bool> result;
+            var token = await SecureStorage.GetAsync("token");
+            Result result;
             if (book.IsFavourite)
             {
-                result = await bookService.RemoveFromFavourites(book.Id);
+                result = await bookService.RemoveFromFavourites(book.Id, token);
             }
             else
             {
-                result = await bookService.AddToFavourites(book.Id);
+                result = await bookService.AddToFavourites(book.Id, token);
             }
 
             if (result.IsSuccess)
@@ -47,7 +49,7 @@ namespace FavouriteLibrary.ViewModels
             else
             {
                 dialogService.ShowError(
-                    ErrorStore.DataEditingFailureMessage,
+                    result.Error,
                     ErrorStore.DataEditingFailure,
                     "Ok",
                     () => dialogService.CloseMessage());
@@ -56,6 +58,7 @@ namespace FavouriteLibrary.ViewModels
 
         public async void LoadBooks()
         {
+            var token = await SecureStorage.GetAsync("token");
             var result = await bookService.Get();
             if (result.IsSuccess)
             {
@@ -78,7 +81,7 @@ namespace FavouriteLibrary.ViewModels
                         book.AuthorName = authors.FirstOrDefault(x => x.Id == book.AuthorId)?.Name;
                     }
 
-                    result = await bookService.GetFavourites();
+                    result = await bookService.GetFavourites(token);
                     foreach (var book in books)
                     {
                         if (result.Data.Any(x => x.Id == book.Id))
@@ -95,7 +98,7 @@ namespace FavouriteLibrary.ViewModels
             {
                 IsBusy = false;
                 dialogService.ShowError(
-                     ErrorStore.DataLoadingFailureMessage, 
+                     result.Error, 
                     ErrorStore.DataLoadingFailure, 
                     "Ok", 
                     () => dialogService.CloseMessage());

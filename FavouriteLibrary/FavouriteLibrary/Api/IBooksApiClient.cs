@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using FavouriteLibrary.Models;
 
-namespace FavouriteLibrary.Services
+namespace FavouriteLibrary.Api
 {
-    interface IBookService
+    interface IBooksApiClient
     {
         Task<Result<ICollection<Book>>> Get();
         Task<Result<ICollection<Book>>> GetFavourites(string token);

@@ -1,77 +1,42 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommonServiceLocator;
+using FavouriteLibrary.Api;
 using FavouriteLibrary.Models;
 
 namespace FavouriteLibrary.Services
 {
     class BookService : IBookService
     {
+        private IBooksApiClient client;
+
+        public BookService()
+        {
+            client = ServiceLocator.Current.GetInstance<IBooksApiClient>();
+        }
         public Task<Result<ICollection<Book>>> Get()
         {
-            return Task.Run(() => new Result<ICollection<Book>>
-            {
-                IsSuccess = true,
-                Data = new List<Book>
-                {
-                    new Book
-                    {
-                        AuthorId = 1, Id = 1, Name = "Уцелевший",
-                        ImagePath = "https://i.ibb.co/P4ksZrz/palanik-survivor.jpg"
-                    },
-                    new Book
-                    {
-                        AuthorId = 1, Id = 2, Name = "Колыбельная",
-                        ImagePath = "https://i.ibb.co/prMHsst/palanik-lullaby.jpg"
-                    },
-                }
-            });
+            return client.Get();
         }
 
-        public Task<Result<ICollection<Book>>> GetFavourites()
+        public Task<Result<ICollection<Book>>> GetFavourites(string token)
         {
-            return Task.Run(() => new Result<ICollection<Book>>
-            {
-                IsSuccess = true,
-                Data = new List<Book>
-                {
-                    new Book
-                    {
-                        AuthorId = 1, Id = 1, Name = "Уцелевший",
-                        ImagePath = "https://i.ibb.co/P4ksZrz/palanik-survivor.jpg"
-                    }
-                }
-            });
+            return client.GetFavourites(token);
         }
 
         public Task<Result<ICollection<Book>>> GetBooksByAuthor(int id)
         {
-            return Task.Run(() => new Result<ICollection<Book>>
-            {
-                IsSuccess = true,
-                Data = new List<Book>
-                {
-                    new Book
-                    {
-                        AuthorId = 1, Id = 1, Name = "Уцелевший",
-                        ImagePath = "https://i.ibb.co/P4ksZrz/palanik-survivor.jpg"
-                    },
-                    new Book
-                    {
-                        AuthorId = 1, Id = 2, Name = "Колыбельная",
-                        ImagePath = "https://i.ibb.co/prMHsst/palanik-lullaby.jpg"
-                    },
-                }
-            });
+            return client.GetBooksByAuthor(id);
         }
 
-        public Task<Result<bool>> AddToFavourites(int id)
+        public Task<Result> AddToFavourites(int id, string token)
         {
-            return Task.Run(() => new Result<bool>() {IsSuccess = true, Data = true});
+            return client.AddToFavourites(id, token);
         }
 
-        public Task<Result<bool>> RemoveFromFavourites(int id)
+        public Task<Result> RemoveFromFavourites(int id, string token)
         {
-            return Task.Run(() => new Result<bool>() { IsSuccess = true, Data = true });
+            return client.RemoveFromFavourites(id, token);
         }
     }
 }

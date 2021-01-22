@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             x:Class="FavouriteLibrary.Views.AuthorizationPage"
-             Shell.NavBarIsVisible="False">
+<ContentPage
+    x:Class="FavouriteLibrary.Views.AuthorizationPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Shell.NavBarIsVisible="False"
+    mc:Ignorable="d">
     <ContentPage.Content>
         <Grid BackgroundColor="{StaticResource GrayBg}">
             <Grid.ColumnDefinitions>
@@ -26,6 +27,7 @@
                 VerticalOptions="FillAndExpand">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="0.8*" />
                         <RowDefinition Height="1*" />
@@ -48,36 +50,43 @@
                         TextColor="{StaticResource GrayForeground}"
                         VerticalOptions="CenterAndExpand" />
                     <Label
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="1"
                         HorizontalOptions="Start"
                         Text="Email"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Grid.Column="1"
                         Keyboard="Email"
                         Text="{Binding Email}" />
                     <Label
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="1"
                         HorizontalOptions="Start"
                         Text="Пароль"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="4"
+                        Grid.Row="5"
                         Grid.Column="1"
                         IsPassword="True"
                         Text="{Binding Password}" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalOptions="Start"
+                        Text="{Binding Error}"
+                        TextColor="{StaticResource Red}"
+                        VerticalOptions="End" />
                     <Button
-                        Grid.Row="5"
+                        Grid.Row="6"
                         Grid.Column="1"
                         Command="{Binding LoginCommand}"
                         Style="{StaticResource MainButton}"
                         Text="Войти"
                         TextColor="White" />
                     <Button
-                        Grid.Row="7"
+                        Grid.Row="8"
                         Grid.Column="1"
                         Command="{Binding RegisterCommand}"
                         Style="{StaticResource TransparentButton}"

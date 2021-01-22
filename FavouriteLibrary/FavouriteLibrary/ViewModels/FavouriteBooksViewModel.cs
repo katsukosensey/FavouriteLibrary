@@ -4,6 +4,7 @@ using System.Linq;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary.ViewModels
@@ -45,7 +46,8 @@ namespace FavouriteLibrary.ViewModels
         }
         private async void RemoveFromFavourites(Book book)
         {
-            Result<bool> result = await bookService.RemoveFromFavourites(book.Id);
+            var token = await SecureStorage.GetAsync("token");
+            Result result = await bookService.RemoveFromFavourites(book.Id, token);
             if (result.IsSuccess)
             {
                 LoadBooks();
@@ -53,7 +55,7 @@ namespace FavouriteLibrary.ViewModels
             else
             {
                 dialogService.ShowError(
-                    ErrorStore.DataEditingFailureMessage,
+                    result.Error,
                     ErrorStore.DataEditingFailure,
                     "Ok",
                     () => dialogService.CloseMessage());
@@ -62,7 +64,8 @@ namespace FavouriteLibrary.ViewModels
 
         public async void LoadBooks()
         {
-            var result = await bookService.GetFavourites();
+            var token = await SecureStorage.GetAsync("token");
+            var result = await bookService.GetFavourites(token);
             if (result.IsSuccess)
             {
                 var books = result.Data;
@@ -93,7 +96,7 @@ namespace FavouriteLibrary.ViewModels
             {
                 IsBusy = false;
                 dialogService.ShowError(
-                    ErrorStore.DataLoadingFailureMessage,
+                    result.Error,
                     ErrorStore.DataLoadingFailure,
                     "Ok",
                     () => dialogService.CloseMessage());

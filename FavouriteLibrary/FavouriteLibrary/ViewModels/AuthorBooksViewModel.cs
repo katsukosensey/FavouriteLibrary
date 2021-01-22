@@ -41,7 +41,7 @@ namespace FavouriteLibrary.ViewModels
             {
                 IsBusy = false;
                 dialogService.ShowError(
-                    ErrorStore.DataLoadingFailureMessage,
+                    result.Error,
                     ErrorStore.DataLoadingFailure,
                     "Ok",
                     () => dialogService.CloseMessage());

@@ -1,43 +1,53 @@
 ﻿using System.Threading.Tasks;
+using CommonServiceLocator;
+using FavouriteLibrary.Api;
 using FavouriteLibrary.Models;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace FavouriteLibrary.Services
 {
     class AuthService : IAuthService
     {
-        public Task<Result<int>> Register(string name, string email, string password, string confirmationPassword)
+        private readonly IAuthApiClient client;
+
+        public AuthService()
         {
-            return Task.Run(()=>new Result<int> {IsSuccess = true});
+            client = ServiceLocator.Current.GetInstance<IAuthApiClient>();
+            CheckToken();
+        }
+        private async void CheckToken()
+        {
+            var token = await SecureStorage.GetAsync("token");
+            if (token != null)
+            {
+                client.SetToken(token);
+            }
+            else
+            {
+                client.ReleaseToken();
+            }
         }
 
-        public Task<Result<User>> Login(string email, string password)
+        public Task<Result> Register(string name, string email, string password, string confirmationPassword)
         {
-            return Task.Run(()=>new Result<User> {IsSuccess = true, Data = new User()
-            {
-                Id = 1,
-                Name = "Ivan",
-                Email = "aaa@gmail.com"
-            }});
+            return client.Register(name, email, password, confirmationPassword);
+        }
+
+        public Task<Result<string>> Login(string email, string password)
+        {
+            return client.Login(email, password, password);
 
         }
 
         public Task<Result<User>> GetMe()
         {
-            return Task.Run(() => new Result<User>
-            {
-                IsSuccess = true,
-                Data = new User
-                {
-                    Id = 1,
-                    Name = "Ivan",
-                    Email = "aaa@gmail.com"
-                }
-            });
+            return client.GetMe();
         }
 
-        public Task<Result<bool>> Logout()
+        public Task<Result> Logout(string token)
         {
-            return Task.Run(() => new Result<bool> { IsSuccess = true });
+            return client.Logout(token);
         }
     }
 }
