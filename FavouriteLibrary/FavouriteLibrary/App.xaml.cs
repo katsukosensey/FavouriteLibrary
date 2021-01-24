@@ -3,11 +3,10 @@ using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
 using FavouriteLibrary.Dependency;
 using MonkeyCache.FileStore;
-using Xamarin.Forms;
 
 namespace FavouriteLibrary
 {
-    public partial class App : Application
+    public partial class App
     {
         public App()
         {

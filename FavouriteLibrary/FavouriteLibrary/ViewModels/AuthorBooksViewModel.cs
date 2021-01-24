@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
@@ -13,16 +15,16 @@ namespace FavouriteLibrary.ViewModels
         private IDialogService dialogService;
         private Author author;
         public ObservableCollection<Book> Books { get; set; }
-        public Command LoadBooksCommand { get; set; }
+        public AsyncCommand LoadBooksCommand { get; set; }
 
         public AuthorBooksViewModel()
         {
             bookService = ServiceLocator.Current.GetInstance<IBookService>();
             dialogService = DependencyService.Get<IDialogService>();
-            LoadBooksCommand = new Command(() => LoadBooks(author, true));
+            LoadBooksCommand = new AsyncCommand(() => LoadBooks(author, true));
         }
 
-        public async void LoadBooks(Author author, bool needUpdate)
+        public async Task LoadBooks(Author author, bool needUpdate)
         {
             this.author = author;
             var result = await bookService.GetBooksByAuthor(author.Id, needUpdate);

@@ -22,19 +22,31 @@ namespace FavouriteLibrary.Api
             var key = "authors";
             if (needUpdate || !Barrel.Current.Exists(key) || Barrel.Current.IsExpired(key))
             {
-                var response = await client.GetAsync("api/authors");
-                var content = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
+                try
+                {
+                    var response = await client.GetAsync("api/authors");
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new Result<ICollection<Author>>
+                        {
+                            IsSuccess = false,
+                            Error = ErrorStore.DataLoadingFailureMessage
+                        };
+                    }
+
+                    var result = JsonConvert.DeserializeObject<Result<ICollection<Author>>>(content);
+                    Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
+                    return result;
+                }
+                catch
                 {
                     return new Result<ICollection<Author>>
                     {
                         IsSuccess = false,
-                        Error = ErrorStore.DataLoadingFailureMessage
+                        Error = ErrorStore.NoInternet
                     };
                 }
-                var result = JsonConvert.DeserializeObject<Result<ICollection<Author>>>(content);
-                Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
-                return result;
             }
 
             return new Result<ICollection<Author>> { Data = Barrel.Current.Get<ICollection<Author>>(key) };
@@ -42,18 +54,29 @@ namespace FavouriteLibrary.Api
 
         public async Task<Result<Author>> GetById(int id)
         {
-            var response = await client.GetAsync($"api/authors/{id}");
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            try
+            {
+                var response = await client.GetAsync($"api/authors/{id}");
+                var content = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Result<Author>
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.DataLoadingFailureMessage
+                    };
+                }
+
+                return JsonConvert.DeserializeObject<Result<Author>>(content);
+            }
+            catch
             {
                 return new Result<Author>
                 {
                     IsSuccess = false,
-                    Error = ErrorStore.DataLoadingFailureMessage
+                    Error = ErrorStore.NoInternet
                 };
             }
-
-            return JsonConvert.DeserializeObject<Result<Author>>(content);
         }
     }
 }

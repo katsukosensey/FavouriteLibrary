@@ -25,16 +25,7 @@
             <Color x:Key="Hint">#B5B5C8</Color>
             <Color x:Key="LightHint">#c4c4c4</Color>
             <Color x:Key="SideMenu">#31313E</Color>
-            <Color x:Key="Cyan">#5fc1cc</Color>
-            <Color x:Key="Black">#1b1b1f</Color>
-            <Color x:Key="Orange">#e9580c</Color>
-            <Color x:Key="Blue">#538ac0</Color>
-            <Color x:Key="ValidationErrorBrush">#d80f21</Color>
-            <Color x:Key="TransparentPlayerBlue">#1a6896f0</Color>
-            <Color x:Key="MaterialDesignPaper">Transparent</Color>
             <Color x:Key="Border">#e4e4f0</Color>
-            <Color x:Key="TransparentPlayerBlueColor">#1a6896f0</Color>
-            <Color x:Key="TransparentCyanColor">#bf5fc1cc</Color>
             <Color x:Key="GrayForeground">#7E7E95</Color>
             <Color x:Key="IconHint">#babaca</Color>
             <Color x:Key="LightPurple">#e9e9f4</Color>

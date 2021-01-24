@@ -22,9 +22,9 @@ namespace FavouriteLibrary.Services
             return client.Get(needUpdate);
         }
 
-        public Task<Result<ICollection<Book>>> GetFavourites(string token, bool needUpdate)
+        public Task<Result<ICollection<Book>>> GetFavourites(bool needUpdate)
         {
-            return client.GetFavourites(token, needUpdate);
+            return client.GetFavourites(needUpdate);
         }
 
         public Task<Result<ICollection<Book>>> GetBooksByAuthor(int id, bool needUpdate)
@@ -32,16 +32,16 @@ namespace FavouriteLibrary.Services
             return client.GetBooksByAuthor(id, needUpdate);
         }
 
-        public Task<Result> AddToFavourites(int id, string token)
+        public Task<Result> AddToFavourites(int id)
         {
             BooksChanged = true;
-            return client.AddToFavourites(id, token);
+            return client.AddToFavourites(id);
         }
 
-        public Task<Result> RemoveFromFavourites(int id, string token)
+        public Task<Result> RemoveFromFavourites(int id)
         {
             BooksChanged = true;
-            return client.RemoveFromFavourites(id, token);
+            return client.RemoveFromFavourites(id);
         }
     }
 }

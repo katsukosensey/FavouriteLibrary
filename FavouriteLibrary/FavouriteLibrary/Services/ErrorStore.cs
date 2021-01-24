@@ -10,6 +10,7 @@
         public const string RegisterError = "Ошибка регистрации. Пожалуйста повторите попытку.";
         public const string LoginError = "Неверные email и/или пароль.";
         public const string EmailInvalid = "Некорректный email.";
+        public const string NoInternet = "Проверьте подключение к Интернету.";
 
     }
 }

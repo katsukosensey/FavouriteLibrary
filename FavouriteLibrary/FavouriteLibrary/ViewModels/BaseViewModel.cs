@@ -7,7 +7,7 @@ namespace FavouriteLibrary.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        bool isBusy = false;
+        bool isBusy;
         public bool IsBusy
         {
             get { return isBusy; }

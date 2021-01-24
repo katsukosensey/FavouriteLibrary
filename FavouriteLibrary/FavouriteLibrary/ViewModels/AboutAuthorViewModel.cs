@@ -2,16 +2,12 @@
 {
     class AboutAuthorViewModel : BaseViewModel
     {
-        private string _bio;
+        private string bio;
 
         public string Bio
         {
-            get => _bio;
-            set
-            {
-                _bio = value;
-                OnPropertyChanged();
-            }
+            get => bio;
+            set => SetProperty(ref bio, value);
         }
     }
 }

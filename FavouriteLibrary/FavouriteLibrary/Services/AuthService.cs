@@ -3,7 +3,6 @@ using CommonServiceLocator;
 using FavouriteLibrary.Api;
 using FavouriteLibrary.Models;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace FavouriteLibrary.Services
 {
@@ -45,9 +44,9 @@ namespace FavouriteLibrary.Services
             return client.GetMe();
         }
 
-        public Task<Result> Logout(string token)
+        public Task<Result> Logout()
         {
-            return client.Logout(token);
+            return client.Logout();
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using CommonServiceLocator;
 using FavouriteLibrary.Services;
 using Xamarin.Forms;
@@ -17,11 +19,7 @@ namespace FavouriteLibrary.ViewModels
         public string UserName
         {
             get => userName;
-            set
-            {
-                userName = value;
-                OnPropertyChanged(nameof(CanApply));
-            }
+            set => SetProperty(ref userName, value);
         }
 
         public string Password
@@ -69,7 +67,7 @@ namespace FavouriteLibrary.ViewModels
         }
 
         public string Error { get; set; }
-        public Command ApplyCommand { get; }
+        public AsyncCommand ApplyCommand { get; }
 
         public bool CanApply => !string.IsNullOrEmpty(UserName) &&
                                 !string.IsNullOrEmpty(Email) &&
@@ -80,10 +78,10 @@ namespace FavouriteLibrary.ViewModels
         public RegistrationViewModel()
         {
             authService = ServiceLocator.Current.GetInstance<IAuthService>();
-            ApplyCommand = new Command(Apply);
+            ApplyCommand = new AsyncCommand(Apply);
         }
 
-        private async void Apply()
+        private async Task Apply()
         {
             var result = await authService.Register(UserName, Email, Password, ConfirmationPassword);
             if (result.IsSuccess)

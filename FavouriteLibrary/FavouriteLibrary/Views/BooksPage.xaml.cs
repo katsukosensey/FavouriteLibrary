@@ -1,12 +1,10 @@
-﻿using FavouriteLibrary.Services;
-using FavouriteLibrary.ViewModels;
-using Xamarin.Forms;
+﻿using FavouriteLibrary.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace FavouriteLibrary.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BooksPage : ContentPage
+    public partial class BooksPage
     {
         public BooksPage()
         {
@@ -20,7 +18,7 @@ namespace FavouriteLibrary.Views
             var hasChanged = btx.BookService.BooksChanged;
             if (hasChanged || btx.Books == null)
             {
-                btx.LoadBooks(hasChanged, hasChanged || btx.Books != null);
+                _ = btx.LoadBooks(hasChanged, hasChanged || btx.Books != null);
                 btx.BookService.BooksChanged = false;
             }
         }

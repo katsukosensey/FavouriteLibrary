@@ -7,6 +7,7 @@ using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
 using MonkeyCache.FileStore;
 using Newtonsoft.Json;
+using Xamarin.Essentials;
 
 namespace FavouriteLibrary.Api
 {
@@ -22,42 +23,66 @@ namespace FavouriteLibrary.Api
             var key = "books";
             if (needUpdate || !Barrel.Current.Exists(key) || Barrel.Current.IsExpired(key))
             {
-                var response = await client.GetAsync("api/books");
-                var content = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
+                try
+                {
+
+                    var response = await client.GetAsync("api/books");
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new Result<ICollection<Book>>
+                        {
+                            IsSuccess = false,
+                            Error = ErrorStore.DataLoadingFailureMessage
+                        };
+                    }
+
+                    var result = JsonConvert.DeserializeObject<Result<ICollection<Book>>>(content);
+                    Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
+                    return result;
+                }
+                catch
                 {
                     return new Result<ICollection<Book>>
                     {
                         IsSuccess = false,
-                        Error = ErrorStore.DataLoadingFailureMessage
+                        Error = ErrorStore.NoInternet
                     };
                 }
-                var result = JsonConvert.DeserializeObject<Result<ICollection<Book>>>(content);
-                Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
-                return result;
             }
 
             return new Result<ICollection<Book>> {Data = Barrel.Current.Get<ICollection<Book>>(key) };
         }
 
-        public async Task<Result<ICollection<Book>>> GetFavourites(string token, bool needUpdate)
+        public async Task<Result<ICollection<Book>>> GetFavourites(bool needUpdate)
         {
             var key = "favourite_books";
             if (needUpdate || !Barrel.Current.Exists(key) || Barrel.Current.IsExpired(key))
             {
-                var response = await client.GetAsync("api/favorite-books");
-                var content = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
+                try
+                {
+                    var response = await client.GetAsync("api/favorite-books");
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new Result<ICollection<Book>>
+                        {
+                            IsSuccess = false,
+                            Error = ErrorStore.DataLoadingFailureMessage
+                        };
+                    }
+                    var result = JsonConvert.DeserializeObject<Result<ICollection<Book>>>(content);
+                    Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
+                    return result;
+                }
+                catch
                 {
                     return new Result<ICollection<Book>>
                     {
                         IsSuccess = false,
-                        Error = ErrorStore.DataLoadingFailureMessage
+                        Error = ErrorStore.NoInternet
                     };
                 }
-                var result = JsonConvert.DeserializeObject<Result<ICollection<Book>>>(content);
-                Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
-                return result;
             }
 
             return new Result<ICollection<Book>> { Data = Barrel.Current.Get<ICollection<Book>>(key) };
@@ -68,55 +93,87 @@ namespace FavouriteLibrary.Api
             var key = $"{id}_books";
             if (needUpdate || !Barrel.Current.Exists(key) || Barrel.Current.IsExpired(key))
             {
-                var response = await client.GetAsync($"api/authors/{id}/books");
-                var content = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
+                try
+                {
+                    var response = await client.GetAsync($"api/authors/{id}/books");
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new Result<ICollection<Book>>
+                        {
+                            IsSuccess = false,
+                            Error = ErrorStore.DataLoadingFailureMessage
+                        };
+                    }
+
+                    var result = JsonConvert.DeserializeObject<Result<ICollection<Book>>>(content);
+                    Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
+                    return result;
+                }
+                catch
                 {
                     return new Result<ICollection<Book>>
                     {
                         IsSuccess = false,
-                        Error = ErrorStore.DataLoadingFailureMessage
+                        Error = ErrorStore.NoInternet
                     };
                 }
-
-                var result = JsonConvert.DeserializeObject<Result<ICollection<Book>>>(content); 
-                Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
-                return result;
+                
             }
-
             return new Result<ICollection<Book>> { Data = Barrel.Current.Get<ICollection<Book>>(key) };
         }
 
-        public async Task<Result> AddToFavourites(int id, string token)
+        public async Task<Result> AddToFavourites(int id)
         {
-            var response = await client.PostAsync($"api/books/{id}/add-to-favorites", new StringContent(""));
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            try
+            {
+                var response = await client.PostAsync($"api/books/{id}/add-to-favorites", new StringContent(""));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Result
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.DataEditingFailureMessage
+                    };
+                }
+                Barrel.Current.Empty("favourite_books");
+                return new Result();
+            }
+            catch
             {
                 return new Result
                 {
                     IsSuccess = false,
-                    Error = ErrorStore.DataEditingFailureMessage
+                    Error = ErrorStore.NoInternet
                 };
             }
-            Barrel.Current.Empty("favourite_books");
-            return new Result();
         }
 
-        public async Task<Result> RemoveFromFavourites(int id, string token)
+        public async Task<Result> RemoveFromFavourites(int id)
         {
-            var response = await client.PostAsync($"api/books/{id}/remove-from-favorites", new StringContent(""));
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            try
+            {
+                var response = await client.PostAsync($"api/books/{id}/remove-from-favorites", new StringContent(""));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Result
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.DataEditingFailureMessage
+                    };
+                }
+                Barrel.Current.Empty("favourite_books");
+                return new Result();
+            }
+            catch
             {
                 return new Result
                 {
                     IsSuccess = false,
-                    Error = ErrorStore.DataEditingFailureMessage
+                    Error = ErrorStore.NoInternet
                 };
             }
-            Barrel.Current.Empty("favourite_books");
-            return new Result();
+            
         }
     }
 }

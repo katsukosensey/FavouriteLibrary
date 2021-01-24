@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary.ViewModels
@@ -15,31 +16,30 @@ namespace FavouriteLibrary.ViewModels
         private IAuthorService authorService;
         private IDialogService dialogService;
         public ObservableCollection<Book> Books { get; set; }
-        public Command LoadBooksCommand { get; set; }
-        public Command<Book> FavouriteStateChangedCommand { get; set; }
+        public AsyncCommand LoadBooksCommand { get; set; }
+        public AsyncCommand<Book> FavouriteStateChangedCommand { get; set; }
 
         public BooksViewModel()
         {
             BookService = ServiceLocator.Current.GetInstance<IBookService>();
             authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
             dialogService = DependencyService.Get<IDialogService>();
-            LoadBooksCommand = new Command(()=>LoadBooks(true, true));
-            FavouriteStateChangedCommand = new Command<Book>(ChangeFavouriteState); 
+            LoadBooksCommand = new AsyncCommand(() => LoadBooks(true, true));
+            FavouriteStateChangedCommand = new AsyncCommand<Book>(ChangeFavouriteState); 
         }
 
-        private async void ChangeFavouriteState(Book book)
+        private async Task ChangeFavouriteState(Book book)
         {
             var bookIsFavourite = book.IsFavourite;
             book.IsFavourite = !bookIsFavourite;
-            var token = await SecureStorage.GetAsync("token");
             Result result;
             if (bookIsFavourite)
             {
-                result = await BookService.RemoveFromFavourites(book.Id, token);
+                result = await BookService.RemoveFromFavourites(book.Id);
             }
             else
             {
-                result = await BookService.AddToFavourites(book.Id, token);
+                result = await BookService.AddToFavourites(book.Id);
             }
 
             if (!result.IsSuccess)
@@ -53,10 +53,9 @@ namespace FavouriteLibrary.ViewModels
             }
         }
 
-        public async void LoadBooks(bool needToUpdate, bool needToInvalidate)
+        public async Task LoadBooks(bool needToUpdate, bool needToInvalidate)
         {
             IsBusy = true;
-            var token = await SecureStorage.GetAsync("token");
             var result = await BookService.Get(needToUpdate);
             if (result.IsSuccess)
             {
@@ -80,7 +79,7 @@ namespace FavouriteLibrary.ViewModels
                         book.AuthorName = authors.FirstOrDefault(x => x.Id == book.AuthorId)?.Name;
                     }
 
-                    result = await BookService.GetFavourites(token, needToUpdate);
+                    result = await BookService.GetFavourites(needToUpdate);
                     foreach (var book in books)
                     {
                         if (result.Data.Any(x => x.Id == book.Id))

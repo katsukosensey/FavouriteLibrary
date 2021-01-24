@@ -1,4 +1,6 @@
-﻿using CommonServiceLocator;
+﻿using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
+using CommonServiceLocator;
 using FavouriteLibrary.Services;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -11,23 +13,18 @@ namespace FavouriteLibrary.ViewModels
         private IDialogService dialogService;
         public string Name { get; set; }
         public string Email { get; set; }
-        public Command LogoutCommand { get; set; }
-
-        public Command LoadProfileCommand { get; set; }
+        public AsyncCommand LogoutCommand { get; set; }
         public ProfileViewModel()
         {
             authService = ServiceLocator.Current.GetInstance<IAuthService>();
             dialogService = DependencyService.Get<IDialogService>();
-            LogoutCommand = new Command(Logout);
-            LoadProfileCommand = new Command(InitProfile);
-            IsBusy = true;
-            InitProfile();
+            LogoutCommand = new AsyncCommand(Logout);
+            _ = InitProfile();
         }
 
-        private async void Logout()
+        private async Task Logout()
         {
-            var token = await SecureStorage.GetAsync("token");
-            var result = await authService.Logout(token);
+            var result = await authService.Logout();
             if (result.IsSuccess)
             {
                 SecureStorage.Remove("token");
@@ -43,8 +40,9 @@ namespace FavouriteLibrary.ViewModels
             }
         }
 
-        private async void InitProfile()
+        private async Task InitProfile()
         {
+            IsBusy = true;
             var result = await authService.GetMe();
             if (result.IsSuccess)
             {

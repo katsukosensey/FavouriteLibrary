@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -10,6 +9,7 @@ using FavouriteLibrary.Services;
 using MonkeyCache.FileStore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Xamarin.Essentials;
 
 namespace FavouriteLibrary.Api
 {
@@ -22,50 +22,73 @@ namespace FavouriteLibrary.Api
         }
         public async Task<Result> Register(string name, string email, string password, string confirmationPassword)
         {
-            var response = await client.PostAsync("api/register", new StringContent(JsonConvert.SerializeObject(new
+            try
             {
-                name,
-                email,
-                password,
-                password_confirmation = confirmationPassword
-            }), Encoding.UTF8,"application/json"));
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+                var response = await client.PostAsync("api/register", new StringContent(JsonConvert.SerializeObject(new
+                {
+                    name,
+                    email,
+                    password,
+                    password_confirmation = confirmationPassword
+                }), Encoding.UTF8, "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Result
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.RegisterError
+                    };
+                }
+
+                return new Result();
+            }
+            catch
             {
                 return new Result
                 {
                     IsSuccess = false,
-                    Error = ErrorStore.RegisterError
+                    Error = ErrorStore.NoInternet
                 };
             }
-            return new Result();
         }
 
         public async Task<Result<string>> Login(string email, string password, string confirmationPassword)
         {
-            var response = await client.PostAsync("api/login", new StringContent(JsonConvert.SerializeObject(new
+            try
             {
-                email,
-                password,
-                password_confirmation = confirmationPassword
-            }), Encoding.UTF8, "application/json"));
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+
+                var response = await client.PostAsync("api/login", new StringContent(JsonConvert.SerializeObject(new
+                {
+                    email,
+                    password,
+                    password_confirmation = confirmationPassword
+                }), Encoding.UTF8, "application/json"));
+                var content = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Result<string>
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.LoginError
+                    };
+                }
+
+                var token = JObject.Parse(content).SelectToken("data.token")?.Value<string>();
+                SetToken(token);
+                return new Result<string>
+                {
+                    IsSuccess = true,
+                    Data = token
+                };
+            }
+            catch
             {
                 return new Result<string>
                 {
                     IsSuccess = false,
-                    Error = ErrorStore.LoginError
+                    Error = ErrorStore.NoInternet
                 };
             }
-
-            var token = JObject.Parse(content).SelectToken("data.token")?.Value<string>();
-            SetToken(token);
-            return new Result<string>
-            {
-                IsSuccess = true,
-                Data = token
-            };
         }
 
         public async Task<Result<User>> GetMe()
@@ -73,41 +96,63 @@ namespace FavouriteLibrary.Api
             var key = "me";
             if (!Barrel.Current.Exists(key) || Barrel.Current.IsExpired(key))
             {
-                var response = await client.GetAsync("api/me");
-                var content = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
+                try
+                {
+                    var response = await client.GetAsync("api/me");
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new Result<User>
+                        {
+                            IsSuccess = false,
+                            Error = ErrorStore.DataLoadingFailureMessage
+                        };
+                    }
+
+                    var result = JsonConvert.DeserializeObject<Result<User>>(content);
+                    Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
+                    return result;
+                }
+                catch
                 {
                     return new Result<User>
                     {
                         IsSuccess = false,
-                        Error = ErrorStore.DataLoadingFailureMessage
+                        Error = ErrorStore.NoInternet
                     };
                 }
-                var result = JsonConvert.DeserializeObject<Result<User>>(content);
-                Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
-                return result;
             }
 
             return new Result<User> { Data = Barrel.Current.Get<User>(key) };
             
         }
 
-        public async Task<Result> Logout(string token)
+        public async Task<Result> Logout()
         {
-            var response = await client.PostAsync("api/logout",new StringContent(""));
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            try
+            {
+                var response = await client.PostAsync("api/logout", new StringContent(""));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Result
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.DataLoadingFailureMessage
+                    };
+                }
+
+                ReleaseToken();
+
+                return new Result();
+            }
+            catch
             {
                 return new Result
                 {
                     IsSuccess = false,
-                    Error = ErrorStore.DataLoadingFailureMessage
+                    Error = ErrorStore.NoInternet
                 };
             }
-
-            ReleaseToken();
-
-            return new Result();
         }
 
         public void SetToken(string token)

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary.ViewModels
@@ -15,7 +16,7 @@ namespace FavouriteLibrary.ViewModels
         private IAuthorService authorService;
         private IDialogService dialogService;
         public ObservableCollection<Book> Books { get; set; }
-        public Command LoadBooksCommand { get; set; }
+        public AsyncCommand LoadBooksCommand { get; set; }
         public Command<Book> RemoveCommand { get; set; }
 
         public FavouriteBooksViewModel()
@@ -23,7 +24,7 @@ namespace FavouriteLibrary.ViewModels
             BookService = ServiceLocator.Current.GetInstance<IBookService>();
             authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
             dialogService = DependencyService.Get<IDialogService>();
-            LoadBooksCommand = new Command(()=>LoadBooks(true, true));
+            LoadBooksCommand = new AsyncCommand(()=>LoadBooks(true, true));
             RemoveCommand = new Command<Book>(RemoveFromFavouritesRequest); 
         }
 
@@ -33,19 +34,18 @@ namespace FavouriteLibrary.ViewModels
                 "Подтверждение",
                 "Да",
                 "Отмена",
-                isConfirmed =>
+                async isConfirmed => 
                 {
                     dialogService.CloseMessage();
                     if (isConfirmed)
                     {
-                        RemoveFromFavourites(book);
+                        await RemoveFromFavourites(book);
                     }
                 });
         }
-        private async void RemoveFromFavourites(Book book)
+        private async Task RemoveFromFavourites(Book book)
         {
-            var token = await SecureStorage.GetAsync("token");
-            Result result = await BookService.RemoveFromFavourites(book.Id, token);
+            Result result = await BookService.RemoveFromFavourites(book.Id);
             if (result.IsSuccess)
             {
                 Books.Remove(book);
@@ -61,11 +61,10 @@ namespace FavouriteLibrary.ViewModels
             }
         }
 
-        public async void LoadBooks(bool needUpdate, bool needInvalidate)
+        public async Task LoadBooks(bool needUpdate, bool needInvalidate)
         {
             IsBusy = true;
-            var token = await SecureStorage.GetAsync("token");
-            var result = await BookService.GetFavourites(token, needUpdate);
+            var result = await BookService.GetFavourites(needUpdate);
             if (result.IsSuccess)
             {
                 if (!needInvalidate) return;

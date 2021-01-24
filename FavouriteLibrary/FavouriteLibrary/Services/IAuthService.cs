@@ -8,6 +8,6 @@ namespace FavouriteLibrary.Services
         Task<Result> Register(string name, string email, string password, string confirmationPassword);
         Task<Result<string>> Login(string email, string password);
         Task<Result<User>> GetMe();
-        Task<Result> Logout(string token);
+        Task<Result> Logout();
     }
 }

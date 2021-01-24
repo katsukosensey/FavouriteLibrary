@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
@@ -13,29 +15,29 @@ namespace FavouriteLibrary.ViewModels
         private IAuthorService authorService;
         private IDialogService dialogService;
         public ObservableCollection<Author> Authors { get; set; }
-        public Command LoadAuthorsCommand { get; set; }
-        public Command<Author> ShowDetailsCommand { get; set; }
+        public AsyncCommand LoadAuthorsCommand { get; set; }
+        public AsyncCommand<Author> ShowDetailsCommand { get; set; }
 
         public AuthorsViewModel()
         {
             bookService = ServiceLocator.Current.GetInstance<IBookService>();
             authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
             dialogService = DependencyService.Get<IDialogService>();
-            LoadAuthorsCommand = new Command(()=>LoadAuthors(true));
-            ShowDetailsCommand = new Command<Author>(ShowDetails);
-            IsBusy = true;
-            LoadAuthors(false);
+            LoadAuthorsCommand = new AsyncCommand(()=>LoadAuthors(true));
+            ShowDetailsCommand = new AsyncCommand<Author>(ShowDetails);
+            _ = LoadAuthors(false);
         }
 
-        private async void ShowDetails(Author author)
+        private async Task ShowDetails(Author author)
         {
             if (author == null)
                 return;
             await Shell.Current.GoToAsync($"{nameof(AuthorDetailsPage)}?{nameof(AuthorDetailsViewModel.AuthorId)}={author.Id}");
         }
 
-        public async void LoadAuthors(bool needUpdate)
+        public async Task LoadAuthors(bool needUpdate)
         {
+            IsBusy = true;
             var result = await authorService.Get(needUpdate);
             if (result.IsSuccess)
             {

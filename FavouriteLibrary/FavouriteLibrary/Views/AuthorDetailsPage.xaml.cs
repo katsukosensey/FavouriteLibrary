@@ -1,10 +1,6 @@
 ﻿using System;
 using FavouriteLibrary.ViewModels;
-using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
-using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Xamarin.Forms.Xaml;
-using TabbedPage = Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage;
 
 namespace FavouriteLibrary.Views
 {
@@ -38,7 +34,7 @@ namespace FavouriteLibrary.Views
             }
             if (CurrentPage is AuthorBooksPage)
             {
-                ((AuthorBooksViewModel)CurrentPage.BindingContext).LoadBooks(author, false);
+                _ = ((AuthorBooksViewModel)CurrentPage.BindingContext).LoadBooks(author, false);
             }
         }
     }

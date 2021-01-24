@@ -1,4 +1,6 @@
-﻿using CommonServiceLocator;
+﻿using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
+using CommonServiceLocator;
 using FavouriteLibrary.Services;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -12,15 +14,15 @@ namespace FavouriteLibrary.ViewModels
         public string Email { get; set; }
         public string Password { get; set; }
         public string Error { get; set; }
-        public Command LoginCommand { get; }
-        public Command RegisterCommand { get; }
+        public AsyncCommand LoginCommand { get; }
+        public AsyncCommand RegisterCommand { get; }
 
         public AuthorizationViewModel()
         {
             CheckToken();
             authService = ServiceLocator.Current.GetInstance<IAuthService>();
-            LoginCommand = new Command(OnLoginClicked);
-            RegisterCommand = new Command(OnRegisterClicked);
+            LoginCommand = new AsyncCommand(OnLoginClicked);
+            RegisterCommand = new AsyncCommand(OnRegisterClicked);
         }
 
         private async void CheckToken()
@@ -32,12 +34,12 @@ namespace FavouriteLibrary.ViewModels
             }
         }
 
-        private async void OnRegisterClicked()
+        private async Task OnRegisterClicked()
         {
             await Shell.Current.GoToAsync("//login/registration");
         }
 
-        private async void OnLoginClicked()
+        private async Task OnLoginClicked()
         {
             var result = await authService.Login(Email, Password);
             if (result.IsSuccess)
