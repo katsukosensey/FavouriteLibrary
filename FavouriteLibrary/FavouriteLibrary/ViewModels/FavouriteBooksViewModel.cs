@@ -11,7 +11,7 @@ namespace FavouriteLibrary.ViewModels
 {
     class FavouriteBooksViewModel : BaseViewModel
     {
-        private IBookService bookService;
+        public IBookService BookService { get; }
         private IAuthorService authorService;
         private IDialogService dialogService;
         public ObservableCollection<Book> Books { get; set; }
@@ -20,13 +20,11 @@ namespace FavouriteLibrary.ViewModels
 
         public FavouriteBooksViewModel()
         {
-            bookService = ServiceLocator.Current.GetInstance<IBookService>();
+            BookService = ServiceLocator.Current.GetInstance<IBookService>();
             authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
             dialogService = DependencyService.Get<IDialogService>();
-            LoadBooksCommand = new Command(LoadBooks);
-            RemoveCommand = new Command<Book>(RemoveFromFavouritesRequest);
-            IsBusy = true;
-            LoadBooks();
+            LoadBooksCommand = new Command(()=>LoadBooks(true, true));
+            RemoveCommand = new Command<Book>(RemoveFromFavouritesRequest); 
         }
 
         private void RemoveFromFavouritesRequest(Book book)
@@ -47,10 +45,11 @@ namespace FavouriteLibrary.ViewModels
         private async void RemoveFromFavourites(Book book)
         {
             var token = await SecureStorage.GetAsync("token");
-            Result result = await bookService.RemoveFromFavourites(book.Id, token);
+            Result result = await BookService.RemoveFromFavourites(book.Id, token);
             if (result.IsSuccess)
             {
-                LoadBooks();
+                Books.Remove(book);
+                OnPropertyChanged(nameof(Books));
             }
             else
             {
@@ -62,12 +61,14 @@ namespace FavouriteLibrary.ViewModels
             }
         }
 
-        public async void LoadBooks()
+        public async void LoadBooks(bool needUpdate, bool needInvalidate)
         {
+            IsBusy = true;
             var token = await SecureStorage.GetAsync("token");
-            var result = await bookService.GetFavourites(token);
+            var result = await BookService.GetFavourites(token, needUpdate);
             if (result.IsSuccess)
             {
+                if (!needInvalidate) return;
                 var books = result.Data;
                 if (books == null || books.Count == 0)
                 {

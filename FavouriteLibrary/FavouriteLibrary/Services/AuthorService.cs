@@ -14,9 +14,9 @@ namespace FavouriteLibrary.Services
         {
             client = ServiceLocator.Current.GetInstance<IAuthorApiClient>();
         }
-        public Task<Result<ICollection<Author>>> Get()
+        public Task<Result<ICollection<Author>>> Get(bool needUpdate)
         {
-            return client.Get();
+            return client.Get(needUpdate);
         }
 
         public Task<Result<Author>> GetById(int id)

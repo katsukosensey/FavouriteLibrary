@@ -38,7 +38,7 @@ namespace FavouriteLibrary.Views
             }
             if (CurrentPage is AuthorBooksPage)
             {
-                ((AuthorBooksViewModel)CurrentPage.BindingContext).LoadBooks(author);
+                ((AuthorBooksViewModel)CurrentPage.BindingContext).LoadBooks(author, false);
             }
         }
     }

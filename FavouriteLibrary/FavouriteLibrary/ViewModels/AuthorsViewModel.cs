@@ -21,10 +21,10 @@ namespace FavouriteLibrary.ViewModels
             bookService = ServiceLocator.Current.GetInstance<IBookService>();
             authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
             dialogService = DependencyService.Get<IDialogService>();
-            LoadAuthorsCommand = new Command(LoadAuthors);
+            LoadAuthorsCommand = new Command(()=>LoadAuthors(true));
             ShowDetailsCommand = new Command<Author>(ShowDetails);
             IsBusy = true;
-            LoadAuthors();
+            LoadAuthors(false);
         }
 
         private async void ShowDetails(Author author)
@@ -34,9 +34,9 @@ namespace FavouriteLibrary.ViewModels
             await Shell.Current.GoToAsync($"{nameof(AuthorDetailsPage)}?{nameof(AuthorDetailsViewModel.AuthorId)}={author.Id}");
         }
 
-        public async void LoadAuthors()
+        public async void LoadAuthors(bool needUpdate)
         {
-            var result = await authorService.Get();
+            var result = await authorService.Get(needUpdate);
             if (result.IsSuccess)
             {
                 var authors = result.Data;
@@ -48,7 +48,7 @@ namespace FavouriteLibrary.ViewModels
                 {
                     foreach (var author in authors)
                     {
-                        var booksResult = await bookService.GetBooksByAuthor(author.Id);
+                        var booksResult = await bookService.GetBooksByAuthor(author.Id, needUpdate);
                         if (booksResult.IsSuccess)
                         {
                             author.BooksCount = booksResult.Data.Count;

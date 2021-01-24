@@ -1,10 +1,13 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
+using MonkeyCache.FileStore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -67,18 +70,26 @@ namespace FavouriteLibrary.Api
 
         public async Task<Result<User>> GetMe()
         {
-            var response = await client.GetAsync("api/me");
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            var key = "me";
+            if (!Barrel.Current.Exists(key) || Barrel.Current.IsExpired(key))
             {
-                return new Result<User>
+                var response = await client.GetAsync("api/me");
+                var content = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
                 {
-                    IsSuccess = false,
-                    Error = ErrorStore.DataLoadingFailureMessage
-                };
+                    return new Result<User>
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.DataLoadingFailureMessage
+                    };
+                }
+                var result = JsonConvert.DeserializeObject<Result<User>>(content);
+                Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
+                return result;
             }
+
+            return new Result<User> { Data = Barrel.Current.Get<User>(key) };
             
-            return JsonConvert.DeserializeObject<Result<User>>(content);
         }
 
         public async Task<Result> Logout(string token)
@@ -109,6 +120,7 @@ namespace FavouriteLibrary.Api
         {
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", string.Empty);
+            Barrel.Current.Empty("favourite_books");
         }
     }
 }

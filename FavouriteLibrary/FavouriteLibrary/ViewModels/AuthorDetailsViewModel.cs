@@ -19,6 +19,7 @@ namespace FavouriteLibrary.ViewModels
             set
             {
                 authorId = value;
+                IsBusy = true;
                 InitAuthor();
             }
         }
@@ -39,9 +40,11 @@ namespace FavouriteLibrary.ViewModels
                 Author = result.Data;
                 OnPropertyChanged(nameof(Author));
                 UpdateAuthorAction?.Invoke();
+                IsBusy = false; 
             }
             else
             {
+                IsBusy = false;
                 dialogService.ShowError(
                     result.Error,
                     ErrorStore.DataLoadingFailure,

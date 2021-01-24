@@ -11,17 +11,21 @@ namespace FavouriteLibrary.ViewModels
 
         private IBookService bookService;
         private IDialogService dialogService;
+        private Author author;
         public ObservableCollection<Book> Books { get; set; }
+        public Command LoadBooksCommand { get; set; }
 
         public AuthorBooksViewModel()
         {
             bookService = ServiceLocator.Current.GetInstance<IBookService>();
             dialogService = DependencyService.Get<IDialogService>();
+            LoadBooksCommand = new Command(() => LoadBooks(author, true));
         }
 
-        public async void LoadBooks(Author author)
+        public async void LoadBooks(Author author, bool needUpdate)
         {
-            var result = await bookService.GetBooksByAuthor(author.Id);
+            this.author = author;
+            var result = await bookService.GetBooksByAuthor(author.Id, needUpdate);
             if (result.IsSuccess)
             {
                 var books = result.Data;
@@ -35,11 +39,9 @@ namespace FavouriteLibrary.ViewModels
                 }
 
                 OnPropertyChanged(nameof(Books));
-                IsBusy = false;
             }
             else
             {
-                IsBusy = false;
                 dialogService.ShowError(
                     result.Error,
                     ErrorStore.DataLoadingFailure,

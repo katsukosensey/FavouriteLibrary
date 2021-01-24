@@ -53,6 +53,7 @@
             <x:String x:Key="BrokenHeart">&#xf02d4;</x:String>
             <x:String x:Key="Reader">&#xf0331;</x:String>
             <x:String x:Key="Logout">&#xf0343;</x:String>
+            <x:String x:Key="Typewriter">&#xf0f2d;</x:String>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource SideMenu}" />
                 <Setter Property="BarTextColor" Value="White" />

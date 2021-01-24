@@ -2,6 +2,7 @@
 using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
 using FavouriteLibrary.Dependency;
+using MonkeyCache.FileStore;
 using Xamarin.Forms;
 
 namespace FavouriteLibrary
@@ -13,6 +14,7 @@ namespace FavouriteLibrary
             InitializeComponent();
 
             ConfigureAutofac(new DependencyModule());
+            Barrel.ApplicationId = "FavouriteLibrary";
             MainPage = new AppShell();
         }
 

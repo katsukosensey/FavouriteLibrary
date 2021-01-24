@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CommonServiceLocator;
 using FavouriteLibrary.Models;
 using FavouriteLibrary.Services;
+using MonkeyCache.FileStore;
 using Newtonsoft.Json;
 
 namespace FavouriteLibrary.Api
@@ -15,20 +17,27 @@ namespace FavouriteLibrary.Api
         {
             client = ServiceLocator.Current.GetInstance<HttpClient>();
         }
-        public async Task<Result<ICollection<Author>>> Get()
+        public async Task<Result<ICollection<Author>>> Get(bool needUpdate)
         {
-            var response = await client.GetAsync("api/authors");
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            var key = "authors";
+            if (needUpdate || !Barrel.Current.Exists(key) || Barrel.Current.IsExpired(key))
             {
-                return new Result<ICollection<Author>>
+                var response = await client.GetAsync("api/authors");
+                var content = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
                 {
-                    IsSuccess = false,
-                    Error = ErrorStore.DataLoadingFailureMessage
-                };
+                    return new Result<ICollection<Author>>
+                    {
+                        IsSuccess = false,
+                        Error = ErrorStore.DataLoadingFailureMessage
+                    };
+                }
+                var result = JsonConvert.DeserializeObject<Result<ICollection<Author>>>(content);
+                Barrel.Current.Add(key, result.Data, TimeSpan.FromDays(1));
+                return result;
             }
 
-            return JsonConvert.DeserializeObject<Result<ICollection<Author>>>(content);
+            return new Result<ICollection<Author>> { Data = Barrel.Current.Get<ICollection<Author>>(key) };
         }
 
         public async Task<Result<Author>> GetById(int id)

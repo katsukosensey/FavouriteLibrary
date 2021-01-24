@@ -10,69 +10,99 @@
         <viewModels:AuthorBooksViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <RefreshView x:DataType="viewModels:AuthorBooksViewModel" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-            <CollectionView
-                x:Name="ItemsListView"
-                ItemsSource="{Binding Books}"
-                SelectionMode="None">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout
-                        HorizontalItemSpacing="7"
-                        Orientation="Vertical"
-                        Span="2" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,0,0,7">
-                            <Frame
-                                Padding="12,7,8,7"
-                                BackgroundColor="White"
-                                HasShadow="True"
-                                HorizontalOptions="FillAndExpand"
-                                VerticalOptions="Center">
-                                <StackLayout x:DataType="models:Book" VerticalOptions="Center">
-                                    <Image Aspect="AspectFit" HeightRequest="200">
-                                        <Image.Style>
-                                            <Style TargetType="Image">
-                                                <Setter Property="Source" Value="{Binding ImagePath}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger
-                                                        Binding="{Binding ImagePath}"
-                                                        TargetType="Image"
-                                                        Value="{x:Null}">
-                                                        <Setter Property="Source">
-                                                            <Setter.Value>
-                                                                <FontImageSource
-                                                                    FontFamily="{StaticResource MaterialFontFamily}"
-                                                                    Glyph="{StaticResource Book}"
-                                                                    Color="{StaticResource Hint}">
-                                                                    <FontImageSource.Size>
-                                                                        <OnIdiom x:TypeArguments="x:Double">
-                                                                            <OnIdiom.Tablet>300</OnIdiom.Tablet>
-                                                                            <OnIdiom.Phone>200</OnIdiom.Phone>
-                                                                        </OnIdiom>
-                                                                    </FontImageSource.Size>
-                                                                </FontImageSource>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Image.Style>
-                                    </Image>
-                                    <Label
-                                        FontSize="Subtitle"
-                                        HorizontalOptions="Center"
-                                        LineBreakMode="NoWrap"
-                                        Style="{DynamicResource ListItemTextStyle}"
-                                        Text="{Binding Name}" />
-                                </StackLayout>
-                            </Frame>
-                        </Grid>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Image
+                Aspect="AspectFill"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Image.Source>
+                    <FontImageSource
+                        FontFamily="{StaticResource MaterialFontFamily}"
+                        Glyph="{StaticResource Typewriter}"
+                        Color="{StaticResource Hint}">
+                        <FontImageSource.Size>
+                            <OnIdiom x:TypeArguments="x:Double">
+                                <OnIdiom.Tablet>46</OnIdiom.Tablet>
+                                <OnIdiom.Phone>40</OnIdiom.Phone>
+                            </OnIdiom>
+                        </FontImageSource.Size>
+                    </FontImageSource>
+                </Image.Source>
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="IsVisible" Value="False" />
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Books.Count}"
+                                TargetType="Image"
+                                Value="0">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <RefreshView
+                x:DataType="viewModels:AuthorBooksViewModel"
+                Command="{Binding LoadBooksCommand}"
+                IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView
+                    x:Name="ItemsListView"
+                    ItemsSource="{Binding Books}"
+                    SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="7"
+                            Orientation="Vertical"
+                            Span="2" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,7">
+                                <Frame
+                                    Padding="12,7,8,7"
+                                    BackgroundColor="White"
+                                    HasShadow="True"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="Center">
+                                    <StackLayout x:DataType="models:Book" VerticalOptions="Center">
+                                        <Image Aspect="AspectFit" HeightRequest="200">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Setter Property="Source" Value="{Binding ImagePath}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger
+                                                            Binding="{Binding ImagePath, TargetNullValue=''}"
+                                                            TargetType="Image"
+                                                            Value="">
+                                                            <Setter Property="Source">
+                                                                <Setter.Value>
+                                                                    <FontImageSource
+                                                                        FontFamily="{StaticResource MaterialFontFamily}"
+                                                                        Glyph="{StaticResource Book}"
+                                                                        Color="{StaticResource Hint}" />
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Setter Property="Opacity" Value="0.3" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <Label
+                                            FontSize="Subtitle"
+                                            HorizontalOptions="Center"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemTextStyle}"
+                                            Text="{Binding Name}" />
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
 
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
