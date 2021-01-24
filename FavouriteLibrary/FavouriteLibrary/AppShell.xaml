@@ -3,9 +3,13 @@
     x:Class="FavouriteLibrary.AppShell"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:FavouriteLibrary.Views"
-    Title="FavouriteLibrary">
-    <ShellContent ContentTemplate="{DataTemplate local:AuthorizationPage}" Route="login" />
+    xmlns:local="clr-namespace:FavouriteLibrary.Views;assembly=FavouriteLibrary"
+    Title="FavouriteLibrary"
+    BackgroundColor="{StaticResource SideMenu}">
+    <ShellContent
+        ContentTemplate="{DataTemplate local:AuthorizationPage}"
+        Route="login"
+        Shell.BackgroundColor="{StaticResource SideMenu}" />
 
     <TabBar Route="main">
         <ShellContent

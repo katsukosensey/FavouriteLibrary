@@ -9,14 +9,16 @@
         <viewModels:AboutAuthorViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="20,18,24,16">
             <Label
                 FontAttributes="Bold"
+                FontSize="Title"
                 HorizontalOptions="StartAndExpand"
                 Text="КРАТКАЯ БИОГРАФИЯ"
-                VerticalOptions="StartAndExpand" />
+                VerticalOptions="Start" />
             <Label
                 Margin="0,7,0,0"
+                FontSize="Medium"
                 HorizontalOptions="StartAndExpand"
                 Text="{Binding Bio}"
                 VerticalOptions="StartAndExpand" />

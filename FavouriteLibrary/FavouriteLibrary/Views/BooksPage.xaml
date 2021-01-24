@@ -17,7 +17,6 @@
             IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
             <CollectionView
                 x:Name="ItemsListView"
-                Margin="20,0"
                 ItemsSource="{Binding Books}"
                 SelectionMode="None">
                 <CollectionView.ItemsLayout>
@@ -26,6 +25,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame
+                            Padding="0,7,8,7"
                             BackgroundColor="White"
                             HasShadow="True"
                             HorizontalOptions="FillAndExpand"
@@ -36,24 +36,51 @@
                                     <ColumnDefinition Width="0.5*" />
                                     <ColumnDefinition Width="0.1*" />
                                 </Grid.ColumnDefinitions>
-
                                 <Image
                                     Grid.Column="0"
                                     Margin="3"
-                                    Aspect="AspectFit"
-                                    Source="{Binding ImagePath}" />
+                                    Aspect="AspectFit">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Setter Property="Source" Value="{Binding ImagePath}" />
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding ImagePath, TargetNullValue=''}"
+                                                    TargetType="Image"
+                                                    Value="">
+                                                    <Setter Property="Source">
+                                                        <Setter.Value>
+                                                            <FontImageSource
+                                                                FontFamily="{StaticResource MaterialFontFamily}"
+                                                                Glyph="{StaticResource Book}"
+                                                                Color="{StaticResource LightHint}">
+                                                                <FontImageSource.Size>
+                                                                    <OnIdiom x:TypeArguments="x:Double">
+                                                                        <OnIdiom.Tablet>46</OnIdiom.Tablet>
+                                                                        <OnIdiom.Phone>40</OnIdiom.Phone>
+                                                                    </OnIdiom>
+                                                                </FontImageSource.Size>
+                                                            </FontImageSource>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Opacity" Value="0.3" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
                                 <StackLayout
                                     Grid.Column="1"
                                     Margin="10,0,0,0"
                                     Padding="10"
                                     VerticalOptions="Center">
                                     <Label
-                                        FontSize="16"
+                                        FontSize="Subtitle"
                                         LineBreakMode="NoWrap"
                                         Style="{DynamicResource ListItemTextStyle}"
                                         Text="{Binding Name}" />
                                     <Label
-                                        FontSize="13"
+                                        FontSize="Small"
                                         LineBreakMode="NoWrap"
                                         Style="{DynamicResource ListItemDetailTextStyle}"
                                         Text="{Binding AuthorName}" />

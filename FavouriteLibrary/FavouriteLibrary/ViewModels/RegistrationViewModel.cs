@@ -1,4 +1,5 @@
-﻿using CommonServiceLocator;
+﻿using System.Text.RegularExpressions;
+using CommonServiceLocator;
 using FavouriteLibrary.Services;
 using Xamarin.Forms;
 
@@ -9,8 +10,29 @@ namespace FavouriteLibrary.ViewModels
         private readonly IAuthService authService;
         private string confirmationPassword;
         private bool isPasswordsEqual;
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        private string email;
+        private string userName;
+        private string password;
+
+        public string UserName
+        {
+            get => userName;
+            set
+            {
+                userName = value;
+                OnPropertyChanged(nameof(CanApply));
+            }
+        }
+
+        public string Password
+        {
+            get => password;
+            set
+            {
+                password = value;
+                OnPropertyChanged(nameof(CanApply));
+            }
+        }
 
         public string ConfirmationPassword
         {
@@ -28,10 +50,24 @@ namespace FavouriteLibrary.ViewModels
                     Error = string.Empty;
                 }
                 OnPropertyChanged(nameof(Error));
+                OnPropertyChanged(nameof(CanApply));
             }
         }
 
-        public string Email { get; set; }
+        public string Email
+        {
+            get => email;
+            set
+            {
+                email = value;
+                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                Match match = regex.Match(email);
+                Error = !match.Success ? ErrorStore.EmailInvalid : string.Empty;
+                OnPropertyChanged(nameof(Error));
+                OnPropertyChanged(nameof(CanApply));
+            }
+        }
+
         public string Error { get; set; }
         public Command ApplyCommand { get; }
 

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FavouriteLibrary.App">
+<Application
+    x:Class="FavouriteLibrary.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <!--
         Define global resources and styles here, that apply to all pages in your app.
     -->
@@ -48,6 +49,10 @@
             <x:String x:Key="Heart">&#xf02d1;</x:String>
             <x:String x:Key="HeartOutline">&#xf02d5;</x:String>
             <x:String x:Key="Pen">&#xf0d13;</x:String>
+            <x:String x:Key="Book">&#xf00be;</x:String>
+            <x:String x:Key="BrokenHeart">&#xf02d4;</x:String>
+            <x:String x:Key="Reader">&#xf0331;</x:String>
+            <x:String x:Key="Logout">&#xf0343;</x:String>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource SideMenu}" />
                 <Setter Property="BarTextColor" Value="White" />
@@ -60,19 +65,12 @@
                 <Setter Property="BorderColor" Value="Transparent" />
                 <Setter Property="BorderWidth" Value="0" />
                 <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontSize" Value="Small" />
                 <Setter Property="HeightRequest">
                     <Setter.Value>
                         <OnIdiom x:TypeArguments="x:Double">
                             <OnIdiom.Tablet>53</OnIdiom.Tablet>
                             <OnIdiom.Phone>36</OnIdiom.Phone>
-                        </OnIdiom>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="FontSize">
-                    <Setter.Value>
-                        <OnIdiom x:TypeArguments="x:Double">
-                            <OnIdiom.Tablet>16</OnIdiom.Tablet>
-                            <OnIdiom.Phone>11</OnIdiom.Phone>
                         </OnIdiom>
                     </Setter.Value>
                 </Setter>
@@ -89,6 +87,8 @@
                 BasedOn="{StaticResource MainButton}"
                 TargetType="Button">
                 <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0" />
                 <Style.Triggers>
                     <Trigger TargetType="Button" Property="IsEnabled" Value="False">
                         <Setter Property="Opacity" Value="1" />
@@ -105,6 +105,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-        </ResourceDictionary>        
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

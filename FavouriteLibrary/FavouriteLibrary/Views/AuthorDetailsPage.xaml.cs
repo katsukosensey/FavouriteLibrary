@@ -1,6 +1,10 @@
 ﻿using System;
 using FavouriteLibrary.ViewModels;
+using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Xamarin.Forms.Xaml;
+using TabbedPage = Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage;
 
 namespace FavouriteLibrary.Views
 {
@@ -10,7 +14,7 @@ namespace FavouriteLibrary.Views
         public AuthorDetailsPage()
         {
             InitializeComponent();
-            ((AuthorDetailsViewModel)BindingContext).UpdateAuthorAction += OnUpdateAuthorAction;
+             ((AuthorDetailsViewModel)BindingContext).UpdateAuthorAction += OnUpdateAuthorAction;
         }
         
 

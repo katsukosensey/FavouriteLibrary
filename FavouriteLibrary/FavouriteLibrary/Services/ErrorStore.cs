@@ -7,8 +7,9 @@
         public const string DataEditingFailure = "Ошибка обновления";
         public const string DataLoadingFailureMessage = "Произошла ошибка загрузки данных. Пожалуйста попробуйте обновить страницу.";
         public const string DataEditingFailureMessage = "Произошла ошибка при изменении данных. Пожалуйста попробуйте обновить страницу.";
-        public const string RegisterError = "Произошла ошибка при регистрации пользователя. Возможно пользователь с таким email уже существует.";
-        public const string LoginError = "Введены неверные email и/или пароль.";
+        public const string RegisterError = "Ошибка регистрации. Пожалуйста повторите попытку.";
+        public const string LoginError = "Неверные email и/или пароль.";
+        public const string EmailInvalid = "Некорректный email.";
 
     }
 }

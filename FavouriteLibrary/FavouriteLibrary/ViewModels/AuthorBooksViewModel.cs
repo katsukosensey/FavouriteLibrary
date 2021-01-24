@@ -19,9 +19,9 @@ namespace FavouriteLibrary.ViewModels
             dialogService = DependencyService.Get<IDialogService>();
         }
 
-        public async void LoadBooks(Author autor)
+        public async void LoadBooks(Author author)
         {
-            var result = await bookService.GetBooksByAuthor(autor.Id);
+            var result = await bookService.GetBooksByAuthor(author.Id);
             if (result.IsSuccess)
             {
                 var books = result.Data;

@@ -9,15 +9,16 @@ namespace FavouriteLibrary.ViewModels
     [QueryProperty(nameof(AuthorId), nameof(AuthorId))]
     class AuthorDetailsViewModel : BaseViewModel
     {
-        private string _authorId;
+        private string authorId;
         private IAuthorService authorService;
+        private IDialogService dialogService;
         public Action UpdateAuthorAction;
         public string AuthorId
         {
-            get => _authorId;
+            get => authorId;
             set
             {
-                _authorId = value;
+                authorId = value;
                 InitAuthor();
             }
         }
@@ -27,6 +28,7 @@ namespace FavouriteLibrary.ViewModels
         public AuthorDetailsViewModel()
         {
             authorService = ServiceLocator.Current.GetInstance<IAuthorService>();
+            dialogService = DependencyService.Get<IDialogService>();
         }
 
         private async void InitAuthor()
@@ -37,6 +39,14 @@ namespace FavouriteLibrary.ViewModels
                 Author = result.Data;
                 OnPropertyChanged(nameof(Author));
                 UpdateAuthorAction?.Invoke();
+            }
+            else
+            {
+                dialogService.ShowError(
+                    result.Error,
+                    ErrorStore.DataLoadingFailure,
+                    "Ok",
+                    () => dialogService.CloseMessage());
             }
         }
     }

@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="Регистрация нового пользователя"
-             x:Class="FavouriteLibrary.Views.RegistrationPage">
+<ContentPage
+    x:Class="FavouriteLibrary.Views.RegistrationPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Регистрация пользователя">
     <ContentPage.Content>
         <Grid BackgroundColor="{StaticResource GrayBg}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.5*" />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="0.5*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.8*" />
-                <RowDefinition Height="7*" />
-                <RowDefinition Height="0.6*" />
+                <RowDefinition Height="0.3*" />
+                <RowDefinition Height="2.0*" />
+                <RowDefinition Height="0.3*" />
             </Grid.RowDefinitions>
             <Frame
                 Grid.Row="1"
@@ -24,16 +25,18 @@
                 VerticalOptions="FillAndExpand">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="0.7*" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="0.7*" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="0.7*" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="0.7*" />
+                        <RowDefinition Height="1.2*" />
                         <RowDefinition Height="0.1*" />
                         <RowDefinition Height="1.5*" />
+                        <RowDefinition Height="0.5*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
@@ -41,60 +44,69 @@
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
                     <Label
-                        Grid.Row="0"
+                        Grid.Row="1"
                         Grid.Column="1"
+                        FontSize="Subtitle"
                         HorizontalOptions="Start"
                         Text="ФИО"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Text="{Binding UserName}" />
-                    <Label
                         Grid.Row="2"
                         Grid.Column="1"
+                        FontSize="Medium"
+                        Text="{Binding UserName}" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        FontSize="Subtitle"
                         HorizontalOptions="Start"
                         Text="Email"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="1"
+                        FontSize="Medium"
                         Keyboard="Email"
                         Text="{Binding Email}" />
                     <Label
-                        Grid.Row="4"
+                        Grid.Row="5"
                         Grid.Column="1"
+                        FontSize="Subtitle"
                         HorizontalOptions="Start"
                         Text="Пароль"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="5"
+                        Grid.Row="6"
                         Grid.Column="1"
+                        FontSize="Medium"
                         IsPassword="True"
                         Text="{Binding Password}" />
                     <Label
-                        Grid.Row="6"
+                        Grid.Row="7"
                         Grid.Column="1"
+                        FontSize="Subtitle"
                         HorizontalOptions="Start"
                         Text="Повторите пароль"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="7"
+                        Grid.Row="8"
                         Grid.Column="1"
+                        FontSize="Medium"
                         IsPassword="True"
                         Text="{Binding ConfirmationPassword}" />
                     <Label
-                        Grid.Row="7"
+                        Grid.Row="0"
                         Grid.Column="1"
-                        HorizontalOptions="Start"
+                        FontSize="Small"
+                        HorizontalOptions="Center"
                         Text="{Binding Error}"
                         TextColor="{StaticResource Red}"
                         VerticalOptions="End" />
                     <Button
-                        Grid.Row="9"
+                        Grid.Row="10"
                         Grid.Column="1"
-                        IsEnabled="{Binding CanApply}"
                         Command="{Binding ApplyCommand}"
+                        IsEnabled="{Binding CanApply}"
                         Style="{StaticResource MainButton}"
                         Text="Зарегистрироваться" />
                 </Grid>

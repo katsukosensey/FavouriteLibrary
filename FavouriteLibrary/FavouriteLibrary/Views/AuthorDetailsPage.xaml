@@ -6,9 +6,11 @@
     xmlns:viewModels="clr-namespace:FavouriteLibrary.ViewModels;assembly=FavouriteLibrary"
     xmlns:views="clr-namespace:FavouriteLibrary.Views;assembly=FavouriteLibrary"
     Title="{Binding Author.Name}"
+    BackgroundColor="{StaticResource SideMenu}"
+    BarBackgroundColor="Transparent"
     CurrentPageChanged="AuthorDetailsPage_OnCurrentPageChanged"
-    BackgroundColor="{StaticResource NavigationPrimary}"
-    BarBackgroundColor="Transparent">
+    SelectedTabColor="{StaticResource Red}"
+    UnselectedTabColor="{StaticResource Hint}">
     <TabbedPage.BindingContext>
         <viewModels:AuthorDetailsViewModel />
     </TabbedPage.BindingContext>

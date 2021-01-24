@@ -19,28 +19,57 @@
                     <GridItemsLayout
                         HorizontalItemSpacing="7"
                         Orientation="Vertical"
-                        Span="2"
-                        VerticalItemSpacing="7" />
+                        Span="2" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame
-                            BackgroundColor="White"
-                            HasShadow="True"
-                            HorizontalOptions="FillAndExpand"
-                            VerticalOptions="Center">
-                            <StackLayout x:DataType="models:Book" VerticalOptions="Center">
-                                <Image
-                                    Aspect="AspectFit"
-                                    HeightRequest="200"
-                                    Source="{Binding ImagePath}" />
-                                <Label
-                                    FontSize="16"
-                                    LineBreakMode="NoWrap"
-                                    Style="{DynamicResource ListItemTextStyle}"
-                                    Text="{Binding Name}" />
-                            </StackLayout>
-                        </Frame>
+                        <Grid Margin="0,0,0,7">
+                            <Frame
+                                Padding="12,7,8,7"
+                                BackgroundColor="White"
+                                HasShadow="True"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="Center">
+                                <StackLayout x:DataType="models:Book" VerticalOptions="Center">
+                                    <Image Aspect="AspectFit" HeightRequest="200">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Source" Value="{Binding ImagePath}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger
+                                                        Binding="{Binding ImagePath}"
+                                                        TargetType="Image"
+                                                        Value="{x:Null}">
+                                                        <Setter Property="Source">
+                                                            <Setter.Value>
+                                                                <FontImageSource
+                                                                    FontFamily="{StaticResource MaterialFontFamily}"
+                                                                    Glyph="{StaticResource Book}"
+                                                                    Color="{StaticResource Hint}">
+                                                                    <FontImageSource.Size>
+                                                                        <OnIdiom x:TypeArguments="x:Double">
+                                                                            <OnIdiom.Tablet>300</OnIdiom.Tablet>
+                                                                            <OnIdiom.Phone>200</OnIdiom.Phone>
+                                                                        </OnIdiom>
+                                                                    </FontImageSource.Size>
+                                                                </FontImageSource>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <Label
+                                        FontSize="Subtitle"
+                                        HorizontalOptions="Center"
+                                        LineBreakMode="NoWrap"
+                                        Style="{DynamicResource ListItemTextStyle}"
+                                        Text="{Binding Name}" />
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

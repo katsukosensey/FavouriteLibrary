@@ -10,15 +10,23 @@
     <ContentPage.Content>
         <Grid BackgroundColor="{StaticResource GrayBg}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.5*" />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="0.5*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="0.3*" />
                 <RowDefinition Height="0.7*" />
-                <RowDefinition Height="7*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="0.3*" />
             </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                FontAttributes="Bold"
+                HorizontalOptions="CenterAndExpand"
+                Text="ЧТО ПОЧИТАТЬ?"
+                TextColor="{StaticResource GrayForeground}"
+                VerticalOptions="CenterAndExpand" />
             <Frame
                 Grid.Row="1"
                 Grid.Column="1"
@@ -27,15 +35,14 @@
                 VerticalOptions="FillAndExpand">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="0.6*" />
+                        <RowDefinition Height="0.7*" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="0.7*" />
+                        <RowDefinition Height="1.2*" />
                         <RowDefinition Height="0.1*" />
                         <RowDefinition Height="1.5*" />
+                        <RowDefinition Height="1.2*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.1*" />
@@ -43,38 +50,36 @@
                         <ColumnDefinition Width="0.1*" />
                     </Grid.ColumnDefinitions>
                     <Label
-                        Grid.Row="0"
+                        Grid.Row="1"
                         Grid.Column="1"
-                        HorizontalOptions="CenterAndExpand"
-                        Text="Для входа в библиотеку авторизуйтесь"
-                        TextColor="{StaticResource GrayForeground}"
-                        VerticalOptions="CenterAndExpand" />
-                    <Label
-                        Grid.Row="2"
-                        Grid.Column="1"
+                        FontSize="Subtitle"
                         HorizontalOptions="Start"
                         Text="Email"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="3"
+                        Grid.Row="2"
                         Grid.Column="1"
+                        FontSize="Medium"
                         Keyboard="Email"
                         Text="{Binding Email}" />
                     <Label
-                        Grid.Row="4"
+                        Grid.Row="3"
                         Grid.Column="1"
+                        FontSize="Subtitle"
                         HorizontalOptions="Start"
                         Text="Пароль"
                         VerticalOptions="End" />
                     <Entry
-                        Grid.Row="5"
+                        Grid.Row="4"
                         Grid.Column="1"
+                        FontSize="Medium"
                         IsPassword="True"
                         Text="{Binding Password}" />
                     <Label
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Grid.Column="1"
-                        HorizontalOptions="Start"
+                        FontSize="Small"
+                        HorizontalOptions="Center"
                         Text="{Binding Error}"
                         TextColor="{StaticResource Red}"
                         VerticalOptions="End" />
@@ -86,12 +91,15 @@
                         Text="Войти"
                         TextColor="White" />
                     <Button
-                        Grid.Row="8"
+                        Grid.Row="7"
                         Grid.Column="1"
                         Command="{Binding RegisterCommand}"
+                        FontSize="Small"
+                        HorizontalOptions="End"
                         Style="{StaticResource TransparentButton}"
                         Text="Регистрация"
-                        TextColor="{StaticResource TitleGray}" />
+                        TextColor="{StaticResource TitleGray}"
+                        VerticalOptions="Start" />
                 </Grid>
             </Frame>
         </Grid>
